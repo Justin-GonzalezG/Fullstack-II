@@ -9,6 +9,53 @@ body {
     background-color: #99f38c;
 }
 
+.header-principal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container img {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+}
+
+.logo-grande {
+    max-width: 350px;
+    height: auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    transition: color 0.2 ease;
+}
+
+.nav-links a:hover {
+    color: #096a11;
+}
+
+.auth-boton {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
 header {
     font-family: 'Times New Roman', Times, serif;
     padding: 20px;
@@ -27,7 +74,81 @@ h2 {
     font-family: 'Roboto', sans-serif;
 }
 
+.etiqueta {
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.hero-banner {
+    background-color: #e8f5e9;
+    border-bottom: 1px solid #c8e6c9;
+}
+
+.hero {
+    padding: 40px 20px;
+}
+
 nav {
+
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-top: 20px; 
+    background-color: #096a11; 
+    padding: 8px 14px; 
+    border-radius: 6px; 
+    text-align: center;
+}
+
+nav a {
+    margin-right: 20px;
+    color: black;
+    text-decoration: underline;
+}
+
+.servicios {
+    font-family: 'Courier New', Courier, monospace;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    font-family: 'Courier New', Courier, monospace;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.tarjeta {
+    font-family: 'Inter', sans-serif;
+    background-color: #5108e4;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid #000000;
+    color: #f4ebd0;
+    box-shadow: 4px 4px 0px #000000;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tarjeta:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 6px 0px #000000;
+}
+
+.tarjeta h3 {
+    margin-top: 0;
+    color: #096a11;
+    font-size: 1.3rem;
+}
+
+.tarjeta .precio {
+    font-weight: bold;
+    font-size: 1.15rem;
+    margin: 15px 0 5px 0;
+    color: #ffeb3b;
+}
 
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin-top: 20px; 
