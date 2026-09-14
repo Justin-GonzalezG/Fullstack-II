@@ -54,6 +54,7 @@
             <h2>La salud de tus Mascotas esta en nuestras manos profesionales</h2>
             <p>Somos especialistas en Perros, Gatos, Conejos y Aves. Además contamos con Consultas, Urgencias y Control de peso para más de 25 pacientes diarios.</p>
         </div>
+
     </section>
 
     <!-- Seccion de Servicios de la Tienda -->
@@ -174,6 +175,75 @@
             </div>
         </div>
     </section>
+
+    <!-- Seccion de Crear cuenta -->
+     <section id="crear-cuenta" class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="text-center mb-4">
+                        <h2>Crear Cuenta</h2>
+                        <p class="text-muted">Registrarse para poder agendar horas y Servicios</p>
+
+                        <form id="formulario-registro" class="border rounded py-4 px-4 shadow bg-white text-start">
+                            
+                            <div class="mb-3">
+                               <label for="registro-nombre" class="form-label">Nombre de Usuario</label>
+                                <input type="text" id="registro-nombre" class="form-control" placeholder="Crea tu nombre de usuario">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="registro-email" class="form-label">Correo Electrónico</label>
+                                <input type="email" id="registro-email" class="form-control" placeholder="correo@ejemplo.com">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="registro-password" class="form-label">Contraseña</label>
+                                <input type="password" id="registro-password" class="form-control" placeholder="Crea una Contraseña">
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Registrarse</button>
+
+                            <div id="mensaje-registro" class="mt-3" role="alert"></div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </section>
+
+     <section id="inicio-sesion" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="text-center mb-4">
+                        <h2>Iniciar Sesión</h2>
+                        <p class="text-muted">Ingresa con tu cuenta registrada para interactuar</p>
+
+                        <form id="formulario-login" class="border rounded py-4 px-4 shadow bg-white text-start">
+                        
+                            <div class="mb-3">
+                                <label for="login-email" class="form-label">Correo Electrónico</label>
+                                <input type="email" id="login-email" class="form-control" placeholder="Ingresa tu correo">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="login-password" class="form-label">Contraseña</label>
+                                <input type="password" id="login-password" class="form-control" placeholder="Ingresa tu contraseña">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        
+                        </form>
+
+                        <div id="mensaje-login" class="mt-3" role="alert"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+     </section>
 
 </body>
 </html>
