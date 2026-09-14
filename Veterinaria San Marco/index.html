@@ -13,26 +13,42 @@
 
 <body>
     
-    <header>
-        <!-- Titulo y descripcion del encabezado -->
-        <h1 id="titulo-sitio">Somos la Veterinaria San Marcos</h1>
-        <img src="imagenes/Logo Veterinaria San Marco.png" alt="Veterinaria San Marco" width="500" height="450">
-        <img src="imagenes/VSM.png" alt="VTS" width="200" height="150">
-        <p>Cuidado profesional para tu mascota en Rancagua</p>
+    <header class="header-principal">
 
-        <!-- Navegacion -->
-        <nav>
+        <!-- Logotipo de VSM -->
+        <div class="logo-container">
+            <img src="imagenes/VSM.png" alt="Logo Pequeño VSM">
+        </div>
+
+        <!-- Navegacion de los liks de la pagina -->
+        <nav class="nav-links">
             <a href="#inicio">Inicio</a>
-            <a href="#crear-cuenta">Crear una Cuenta</a>
-            <a href="#inicio-sesion">Iniciar Sesion</a>
             <a href="#servicios">Servicios</a>
             <a href="#citas">Citas</a>
             <a href="#contacto">Contacto</a>
         </nav>
+
+        <!-- Navegacion de los botones para crea y iniciar sesion -->
+        <div class="auth-boton">
+            <a href="#crear-cuenta" class="btn btn-outline-success btn-sm">Crear Cuenta</a>
+            <a href="#inicio-sesion" class="btn btn-success btn-sm">Iniciar Sesión</a>
+        </div>
+
     </header>
+
+    <!-- Seccion de Titulo de la Pagina -->
+    <section class="hero-banner text-center py-4">
+        <h1 id="titulo-sitio">Somos Veterinaria San Marco</h1>
+        <p>Cuidado profesional para tu Mascota, somos la mejor Veterinaria de Rancagua.</p>
+    </section>
     
     <!-- Seccion de Inicio de la Tienda -->
     <section id="inicio" class="hero">
+
+        <div class="container mb-4">
+            <img src="imagenes/Logo Veterinaria San Marco.png" alt="Logo Grande Veterinaria San Marcos" class="img-fluid logo-grande">
+        </div>
+
         <div>
             <p class="etiqueta">Atención de Excelencia desde 2009</p>
             <h2>La salud de tus Mascotas esta en nuestras manos profesionales</h2>
