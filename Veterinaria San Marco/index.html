@@ -42,17 +42,23 @@
         <p>Cuidado profesional para tu Mascota, somos la mejor Veterinaria de Rancagua.</p>
     </section>
     
-    <!-- Seccion de Inicio de la Tienda -->
-    <section id="inicio" class="hero">
+    <!-- Seccion de Inicio de la Tienda modificada a dos columnas tipo Huerto Hogar -->
+    <section id="inicio" class="hero hero-banner-dos-columnas">
 
-        <div class="container mb-4">
-            <img src="imagenes/Logo Veterinaria San Marco.png" alt="Logo Grande Veterinaria San Marcos" class="img-fluid logo-grande">
-        </div>
-
-        <div>
+        <div class="hero-texto">
             <p class="etiqueta">Atención de Excelencia desde 2009</p>
             <h2>La salud de tus Mascotas esta en nuestras manos profesionales</h2>
             <p>Somos especialistas en Perros, Gatos, Conejos y Aves. Además contamos con Consultas, Urgencias y Control de peso para más de 25 pacientes diarios.</p>
+
+            <div class="hero-botones mt-4">
+                <a href="#servicios" class="btn btn-primary btn-primario">Ver Servicios</a>
+                <a href="#citas" class="btn btn-outline-secondary btn-secundario">Agendar Cita</a>
+            </div>
+
+        </div>
+
+        <div class="hero-imagen text-center">
+            <img src="imagenes/Logo Veterinaria San Marco.png" alt="Logo Grande Veterinaria San Marcos" class="img-fluid logo-grande">
         </div>
 
     </section>
@@ -108,8 +114,80 @@
 
         </div>
     </section>
-    
-    <!-- Seccion de Agendar Citas -->
+
+    <!-- Seccion de Crear cuenta -->
+     <section id="crear-cuenta" class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="text-center mb-4">
+                        <h2>Crear Cuenta</h2>
+                        <p class="text-muted">Registrarse para poder agendar horas y Servicios</p>
+
+                        <form id="formulario-registro" class="border rounded py-4 px-4 shadow bg-white text-start">
+                            
+                            <div class="mb-3">
+                               <label for="registro-nombre" class="form-label">Nombre de Usuario</label>
+                                <input type="text" id="registro-nombre" class="form-control" placeholder="Crea tu nombre de usuario">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="registro-email" class="form-label">Correo Electrónico</label>
+                                <input type="email" id="registro-email" class="form-control" placeholder="correo@ejemplo.com">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="registro-password" class="form-label">Contraseña</label>
+                                <input type="password" id="registro-password" class="form-control" placeholder="Crea una Contraseña">
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Registrarse</button>
+
+                            <div id="mensaje-registro" class="mt-3" role="alert"></div>
+
+                        </form>
+
+                        <p id="mensaje-crear">Crea una cuenta con nosotros y unete a nuestra pagina para poder interactuar con nuestros servicios.</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+     </section>
+
+     <section id="inicio-sesion" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="text-center mb-4">
+                        <h2>Iniciar Sesión</h2>
+                        <p class="text-muted">Ingresa con tu cuenta registrada para interactuar</p>
+
+                        <form id="formulario-login" class="border rounded py-4 px-4 shadow bg-white text-start">
+                        
+                            <div class="mb-3">
+                                <label for="login-email" class="form-label">Correo Electrónico</label>
+                                <input type="email" id="login-email" class="form-control" placeholder="Ingresa tu correo">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="login-password" class="form-label">Contraseña</label>
+                                <input type="password" id="login-password" class="form-control" placeholder="Ingresa tu contraseña">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        
+                        </form>
+
+                        <div id="mensaje-login" class="mt-3" role="alert"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+     </section>
+
+      <!-- Seccion de Agendar Citas -->
     <section id="citas" class="bg-light py-5">
         <div class="container">
             <div class="row justify-content-center">
@@ -121,16 +199,16 @@
 
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">
-                                    Nombre de Usuario
+                                    Nombre de la Mascota
                                 </label>
-                                <input type="text" id="nombre" class="form-control" placeholder="Ingrese nombre de usuario">
+                                <input type="text" id="nombre" class="form-control" placeholder="Ingrese nombre de su Mascota">
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">
                                     Email
                                 </label>
-                                <input type="email" id="email" class="form-control" placeholder="Ingrese su correo ej: usuario@gmail.com">
+                                <input type="email" id="email" class="form-control" placeholder="Ingrese su correo para verificar registro">
                             </div>
 
                             <div class="mb-3">
@@ -176,74 +254,20 @@
         </div>
     </section>
 
-    <!-- Seccion de Crear cuenta -->
-     <section id="crear-cuenta" class="py-5 bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-8 col-lg-6">
-                    <div class="text-center mb-4">
-                        <h2>Crear Cuenta</h2>
-                        <p class="text-muted">Registrarse para poder agendar horas y Servicios</p>
-
-                        <form id="formulario-registro" class="border rounded py-4 px-4 shadow bg-white text-start">
-                            
-                            <div class="mb-3">
-                               <label for="registro-nombre" class="form-label">Nombre de Usuario</label>
-                                <input type="text" id="registro-nombre" class="form-control" placeholder="Crea tu nombre de usuario">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="registro-email" class="form-label">Correo Electrónico</label>
-                                <input type="email" id="registro-email" class="form-control" placeholder="correo@ejemplo.com">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="registro-password" class="form-label">Contraseña</label>
-                                <input type="password" id="registro-password" class="form-control" placeholder="Crea una Contraseña">
-                            </div>
-
-                            <button type="submit" class="btn btn-success w-100">Registrarse</button>
-
-                            <div id="mensaje-registro" class="mt-3" role="alert"></div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <footer id="contacto" class="footer-principal py-5 bg-dark text-white">
+    <div class="container text-center">
+        <p class="mb-3 fw-bold fs-5">Nuestras Redes Sociales</p>
+        <div class="redes-sociales-container">
+            <a href="#" target="_blank" class="social-icon">
+                <img src="imagenes/logo-instagram_971166-164497.avif" alt="Logo de Instagram" width="50" height="50">
+            </a>
+            <a href="#" target="_blank" class="social-icon">
+                <img src="imagenes/whatsapp-vector-logo-icono-logotipo-vector-redes-sociales_901408-406.avif" alt="Imagen de Logo Whatsapp" width="50" height="50">
+            </a>
         </div>
-     </section>
-
-     <section id="inicio-sesion" class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-8 col-lg-6">
-                    <div class="text-center mb-4">
-                        <h2>Iniciar Sesión</h2>
-                        <p class="text-muted">Ingresa con tu cuenta registrada para interactuar</p>
-
-                        <form id="formulario-login" class="border rounded py-4 px-4 shadow bg-white text-start">
-                        
-                            <div class="mb-3">
-                                <label for="login-email" class="form-label">Correo Electrónico</label>
-                                <input type="email" id="login-email" class="form-control" placeholder="Ingresa tu correo">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="login-password" class="form-label">Contraseña</label>
-                                <input type="password" id="login-password" class="form-control" placeholder="Ingresa tu contraseña">
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                        
-                        </form>
-
-                        <div id="mensaje-login" class="mt-3" role="alert"></div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-     </section>
+        <p class="mt-4 text-muted small">&copy; 2026 Veterinaria San Marcos - Todos los derechos reservados.</p>
+    </div>
+</footer>
 
 </body>
 </html>
