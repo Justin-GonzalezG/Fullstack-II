@@ -67,3 +67,61 @@ formularioCitas.addEventListener("submit", function(evento) {
 
     formularioCitas.reset();
 })
+
+/* Validaciones de crear y iniciar sesion */
+
+const formRegistro = document.getElementById("formulario-registro");
+const formLogin = document.getElementById("formulario-login");
+const formCitas = document.getElementById("formulario-citas");
+    
+const btnReservar = document.getElementById("btn-reservar");
+const avisoSesion = document.getElementById("aviso-sesion");
+
+const botonesAgregar = document.querySelectorAll(".boton-agregar");
+const contadorServicios = document.getElementById("contador-servicios");
+const ultimoProducto = document.getElementById("ultimo-producto");
+
+let contador = 0;
+
+const usuarioActivo = localStorage.getItem("usuarioLogueado");
+
+if (usuarioActivo) {
+
+    btnReservar.disable = false;
+    avisoSesion.textContent = "Sesión Iniciada como: " + usuarioActivo;
+    avisoSesion.style.color = "green";
+
+} else {
+
+    btnReservar.disable = true;
+    avisoSesion.textContent = "Debes iniciar sesión para agendar.";
+    avisoSesion.style.color = "red";
+
+}
+
+formRegistro.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById("registro-nombre").value;
+    const email = document.getElementById("registro-email").value;
+    const password = document.getElementById("registro-password").value;
+
+    localStorage.setItem("nombreRegistrado", nombre);
+    localStorage.setItem("emailRegistrado", email);
+    localStorage.setItem("passwordRegistrado", password);
+
+    alert("Cuenta creada con exito. Ahora puedes iniciar la sesión.");
+    formRegistro.reset();
+});
+
+formLogin.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const emailLogin = document.getElementById("login-email").value;
+    const passwordLogin = document.getElementById("login-password").value;
+
+    const emailGuardado = localStorage.getItem("emailRegistrado");
+    const passwordGuardado = localStorage.getItem("passwordRegistrado");
+    const nombreGuardado = localStorage.getItem("nombreRegistrado");
+    
+});
