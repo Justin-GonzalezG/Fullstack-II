@@ -16,11 +16,15 @@
     <header>
         <!-- Titulo y descripcion del encabezado -->
         <h1 id="titulo-sitio">Somos la Veterinaria San Marcos</h1>
+        <img src="imagenes/Logo Veterinaria San Marco.png" alt="Veterinaria San Marco" width="500" height="450">
+        <img src="imagenes/VSM.png" alt="VTS" width="200" height="150">
         <p>Cuidado profesional para tu mascota en Rancagua</p>
 
         <!-- Navegacion -->
         <nav>
             <a href="#inicio">Inicio</a>
+            <a href="#crear-cuenta">Crear una Cuenta</a>
+            <a href="#inicio-sesion">Iniciar Sesion</a>
             <a href="#servicios">Servicios</a>
             <a href="#citas">Citas</a>
             <a href="#contacto">Contacto</a>
@@ -85,6 +89,73 @@
                 <button class="btn btn-outline-light boton-agregar" data-servicios="Consulta Cirugia">Seleccionar Cirugia</button>
             </article>
 
+        </div>
+    </section>
+    
+    <!-- Seccion de Agendar Citas -->
+    <section id="citas" class="bg-light py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="text-center mb-4">
+                        <h2>Agendar Citas</h2>
+
+                        <form action="" id="formulario-citas" class="border rounded py-4 shadow bg-white">
+
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">
+                                    Nombre de Usuario
+                                </label>
+                                <input type="text" id="nombre" class="form-control" placeholder="Ingrese nombre de usuario">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    Email
+                                </label>
+                                <input type="email" id="email" class="form-control" placeholder="Ingrese su correo ej: usuario@gmail.com">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contraseña" class="form-label">
+                                    Contraseña
+                                </label>
+                                <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="agendar" class="form-label">
+                                    Agendar fecha de Cita
+                                </label>
+                                <input type="date" id="agendar" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="horario" class="form-label">
+                                    Hora de la Cita
+                                </label>
+                                <select name="horario" id="horario" class="form-select">
+                                    <option value="">Seleccione un horario</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-primary w-100">Reservar Cita</button>
+
+                        </form>
+
+                        <div id="mensaje-resultado" class="mt-4" role="alert"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
