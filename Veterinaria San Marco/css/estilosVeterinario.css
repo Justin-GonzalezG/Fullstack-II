@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
 }
@@ -29,7 +30,7 @@ body {
 }
 
 .logo-grande {
-    max-width: 350px;
+    max-width: 500px;
     height: auto;
 }
 
@@ -102,8 +103,31 @@ main {
     padding: 40px 20px;
 }
 
-nav {
+.hero-banner-dos-columnas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
 
+.hero-banner-dos-columnas .hero-texto,
+.hero-banner-dos-columnas .hero-imagen {
+    flex: 1;
+    min-width: 280px;
+}
+
+.hero-botones {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.hero-botones .btn-primary {
+    width: auto;
+}
+
+nav {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin-top: 20px; 
     background-color: #ffffff; 
@@ -121,6 +145,68 @@ nav a {
 
 nav a:hover {
     color: #0096c7;
+}
+
+#valores-veterinaria {
+    padding: 4rem 2rem;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+#valores-mensaje {
+    color: #0b2545;
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+#mensajeValor {
+    font-family: 'Times New Roman', serif;
+    color: #4a5568;
+    font-family: 'Inter', sans-serif;
+    padding: 0 1rem;
+}
+
+.contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tarjeta-valores {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    border: 2px solid #0b2545;
+    color: #1d3557;
+    box-shadow: 5px 5px 0px #0b2545;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tarjeta-valores:hover {
+    box-shadow: 0 10px 25px rgba(11, 37, 69, 0.12);
+}
+
+.tarjeta-valores h3 {
+    color: #134074;
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.tarjeta-valores p {
+    color: #6c757d;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .servicios {
@@ -174,7 +260,7 @@ nav a:hover {
     padding: 30px;
     border-radius: 16px;
     border: 2px solid #0b2545;
-    box-shadow: 6px 6px 0px #0b2545; /* Mantiene tu estilo moderno de relieve */
+    box-shadow: 6px 6px 0px #0b2545;
     max-width: 500px;
     margin: 20px auto;
 }
@@ -238,4 +324,57 @@ button[type="submit"]:hover {
     padding: 12px;
     border-radius: 8px;
     font-weight: 500;
+}
+
+#citas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 2rem;
+}
+
+#crear-cuenta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 2rem;
+}
+
+#mensaje-crear {
+    background-color: #0b2545;
+    color: #ffffff;
+    padding: 3rem 2.5rem;
+    border-radius: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    box-shadow: 0 10px 25px rgba(11, 37, 69, 0.2);
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+}
+
+
+#inicio-sesion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 2rem;
+}
+
+#mensaje-inicio {
+    background-color: #0b2545;
+    color: #ffffff;
+    padding: 3rem 2.5rem;
+    border-radius: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    box-shadow: 0 10px 25px rgba(11, 37, 69, 0.2);
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
 }
