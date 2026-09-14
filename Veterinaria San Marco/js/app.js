@@ -2,10 +2,8 @@
 /* Titulo y Cambio de titulo */
 
 const titulo = document.getElementById("titulo-sitio");
-if (titulo) {
-    titulo.textContent = "Veterinaria San Marcos - Atención Profesional";
-    console.log(titulo);
-}
+titulo.textContent = "Veterinaria San Marcos - Atención Profesional";
+console.log(titulo)
 
 /* Comntador del Servicio y validaciones */
 
