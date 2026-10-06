@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
+  const esPersonalAutorizado = rolActivo === "Administrador" || rolActivo === "Trabajador";
+  const [cantidadCarrito, setCantidadCarrito] = useState(0);
+
+  useEffect(() => {
+    const guardados = JSON.parse(localStorage.getItem("misServicios")) || [];
+    setCantidadCarrito(guardados.length);
+  }, [usuarioActivo]);
+
   return (
     <header className="header-principal">
       <div className="logo-container">
@@ -14,6 +22,13 @@ export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
         <Link to="/">Inicio</Link>
         <Link to="/servicios">Servicios</Link>
         <Link to="/citas">Citas</Link>
+        {usuarioActivo && <Link to="/perfil">Mi Perfil</Link>}
+        {usuarioActivo && (
+          <Link to="/carrito-servicios" className="position-relative">
+            Servicios <span className="badge bg-primary rounded-pill">{cantidadCarrito}</span>
+          </Link>
+        )}
+        {esPersonalAutorizado && <Link to="/admin" className="text-danger fw-bold">Panel Admin</Link>}
       </nav>
 
       <div className="auth-boton">

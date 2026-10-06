@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Valores from './components/Valores';
+import Testimonios from './components/Testimonios';
 import ServiciosPages from './pages/ServiciosPages';
 import LoginPage from './pages/LoginPage';
 import RegistroPage from './pages/RegistroPage';
 import RegistroMascotaPage from './pages/RegistroMascotaPage';
 import CitasPages from './pages/CitasPages';
+import PerfilPage from './pages/PerfilPage';
+import AdminPanelPage from './pages/AdminPanelPage';
+import ServiciosSeleccionadosPage from './pages/ServiciosSeleccionadosPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
@@ -19,9 +23,11 @@ export default function App() {
   useEffect(() => {
     const usuario = localStorage.getItem("usuarioLogueado");
     const rol = localStorage.getItem("rolLogueado");
+    const guardados = JSON.parse(localStorage.getItem("misServicios")) || [];
     if (usuario) {
       setUsuarioActivo(usuario);
       setRolActivo(rol);
+      setCantidadServicios(guardados.length);
     }
   }, []);
 
@@ -33,16 +39,14 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem("usuarioLogueado");
     localStorage.removeItem("rolLogueado");
+    localStorage.removeItem("misServicios");
     setUsuarioActivo(null);
     setRolActivo(null);
+    setCantidadServicios(0);
     window.location.href = "/";
   };
 
   const handleAgregarServicio = (nombreServicio) => {
-    if (!localStorage.getItem("usuarioLogueado")) {
-      alert("Debes iniciar sesión para seleccionar los Servicios.");
-      return;
-    }
     setCantidadServicios((prev) => prev + 1);
     setUltimoServicio(nombreServicio);
   };
@@ -62,6 +66,7 @@ export default function App() {
                   <p className="lead text-muted">Atención Profesional y Cuidado Integral para tu mascota</p>
                 </section>
                 <Valores />
+                <Testimonios />
               </>
             } 
           />
@@ -90,6 +95,18 @@ export default function App() {
           <Route 
             path="/citas" 
             element={<CitasPages usuarioActivo={usuarioActivo} />} 
+          />
+          <Route 
+            path="/perfil" 
+            element={<PerfilPage />} 
+          />
+          <Route 
+            path="/admin" 
+            element={<AdminPanelPage />} 
+          />
+          <Route 
+            path="/carrito-servicios" 
+            element={<ServiciosSeleccionadosPage />} 
           />
         </Routes>
       </main>

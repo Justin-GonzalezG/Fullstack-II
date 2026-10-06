@@ -10,6 +10,21 @@ export default function ServiciosPages({ onAgregarServicio, cantidadServicios, u
     { id: 6, nombre: "Cirugía General", precio: "$80.000", desc: "Pabellón equipado y monitoreo constante para cirugías." }
   ];
 
+  const handleAgregarAlCarrito = (servicio) => {
+    if (!localStorage.getItem("usuarioLogueado")) {
+      alert("Debes iniciar sesión para seleccionar los Servicios.");
+      return;
+    }
+
+    // Obtener los servicios previos del localStorage y añadir el nuevo
+    const serviciosActuales = JSON.parse(localStorage.getItem("misServicios")) || [];
+    const nuevosServicios = [...serviciosActuales, servicio];
+    localStorage.setItem("misServicios", JSON.stringify(nuevosServicios));
+
+    // Ejecutar la función que viene por props para actualizar contadores en App
+    onAgregarServicio(servicio.nombre);
+  };
+
   return (
     <section id="servicios" className="container my-5">
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
@@ -25,11 +40,11 @@ export default function ServiciosPages({ onAgregarServicio, cantidadServicios, u
 
       {ultimoServicio && (
         <div id="ultimo-producto" className="alert alert-info py-2 mb-3 text-center">
-          {ultimoServicio} fue agregado correctamente.
+          {ultimoServicio} fue agregado correctamente al carrito.
         </div>
       )}
 
-      <div className="servicios d-flex flex-wrap gap-4">
+      <div className="servicios d-flex flex-wrap gap-4 justify-content-center">
         {listaServicios.map((s) => (
           <div key={s.id} className="tarjeta p-3 border rounded shadow-sm bg-white d-flex flex-column justify-content-between" style={{ width: '260px' }}>
             <div>
@@ -40,8 +55,7 @@ export default function ServiciosPages({ onAgregarServicio, cantidadServicios, u
               <span className="precio fw-bold fs-5 text-success">{s.precio}</span>
               <button 
                 className="btn btn-primary w-100 mt-2 boton-agregar"
-                data-servicios={s.nombre}
-                onClick={() => onAgregarServicio(s.nombre)}
+                onClick={() => handleAgregarAlCarrito(s)}
               >
                 Agregar Servicio
               </button>
