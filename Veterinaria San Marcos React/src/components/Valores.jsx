@@ -1,26 +1,49 @@
 import React from 'react';
+import imgCompasion from '../assets/Compasion.png';
+import imgConfianza from '../assets/Confianza.png';
+import imgProfesionalismo from '../assets/Profesionalismo.png';
 
 export default function Valores() {
-  return (
-    <section id="valores-veterinaria" className="container my-5">
-      <h2 id="valores-mensaje" className="text-center" style={{ color: '#0b2545' }}>Nuestros Valores</h2>
-      <p id="mensajeValor" className="text-center text-muted">
-        Comprometidos con el bienestar y la salud de tus mascotas con profesionalismo y dedicación.
-      </p>
+  const listaValores = [
+    {
+      imagen: imgCompasion,
+      titulo: "Compromiso y Amor Animal",
+      desc: "Tratamos a cada paciente como si fuera nuestro. Su bienestar emocional y físico es nuestra máxima prioridad."
+    },
+    {
+      imagen: imgConfianza,
+      titulo: "Confianza y Transparencia",
+      desc: "Brindamos diagnósticos claros, presupuestos transparentes y comunicación directa con los tutores."
+    },
+    {
+      imagen: imgProfesionalismo,
+      titulo: "Profesionalismo Médico",
+      desc: "Contamos con equipamiento actualizado y nos mantenemos en constante capacitación profesional."
+    }
+  ];
 
-      <div className="contenedor-tarjetas mt-4 d-flex justify-content-around flex-wrap gap-3">
-        <div className="tarjeta-valores p-3 border rounded shadow-sm bg-white" style={{ width: '300px' }}>
-          <h3>Compromiso</h3>
-          <p>Brindamos la mejor atención y cuidado veterinario con responsabilidad absoluta.</p>
-        </div>
-        <div className="tarjeta-valores p-3 border rounded shadow-sm bg-white" style={{ width: '300px' }}>
-          <h3>Empatía</h3>
-          <p>Amamos a los animales y entendemos el vínculo especial que tienes con ellos.</p>
-        </div>
-        <div className="tarjeta-valores p-3 border rounded shadow-sm bg-white" style={{ width: '300px' }}>
-          <h3>Profesionalismo</h3>
-          <p>Contamos con tecnología y personal altamente capacitado para cada diagnóstico.</p>
-        </div>
+  return (
+    <section className="container seccion-valores my-5">
+      <h3 className="titulo-seccion text-center mb-4" style={{ color: '#0b2545', fontWeight: 'bold' }}>
+        Nuestros Valores Principales
+      </h3>
+      <div className="row g-4">
+        {listaValores.map((v, idx) => (
+          <div key={idx} className="col-md-4">
+            <div className="tarjeta-valor text-center p-4 bg-white rounded shadow-sm border h-100">
+              <div className="mb-3">
+                <img 
+                  src={v.imagen} 
+                  alt={v.titulo} 
+                  className="img-fluid rounded-circle shadow-sm" 
+                  style={{ width: '120px', height: '120px', objectFit: 'cover' }} 
+                />
+              </div>
+              <h4 className="fw-bold" style={{ color: '#0b2545', fontSize: '1.25rem' }}>{v.titulo}</h4>
+              <p className="text-muted small m-0">{v.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

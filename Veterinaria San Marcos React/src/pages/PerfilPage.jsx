@@ -1,48 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function PerfilPage() {
-  const [datosUsuario, setDatosUsuario] = useState({});
-  const [datosMascota, setDatosMascota] = useState({});
+  const [usuario, setUsuario] = useState('');
+  const [rol, setRol] = useState('');
+  const [mascotas, setMascotas] = useState([]);
 
   useEffect(() => {
-    const nombre = localStorage.getItem("nombreRegistrado") || localStorage.getItem("usuarioLogueado") || "No especificado";
-    const email = localStorage.getItem("emailRegistrado") || "No especificado";
-    const rol = localStorage.getItem("rolLogueado") || "Cliente";
+    const userLog = localStorage.getItem("usuarioLogueado") || "Usuario Registrado";
+    const rolLog = localStorage.getItem("rolLogueado") || "Cliente";
+    const listaMascotas = JSON.parse(localStorage.getItem("mascotas")) || [];
 
-    const nombreMascota = localStorage.getItem("nombreMascota") || "Aún no registrada";
-    const edadMascota = localStorage.getItem("edadMascota") || "No especificada";
-    const razaMascota = localStorage.getItem("razaMascota") || "No especificada";
-    const vacunasMascota = localStorage.getItem("vacunasMascota") || "0";
-
-    setDatosUsuario({ nombre, email, rol });
-    setDatosMascota({ nombreMascota, edadMascota, razaMascota, vacunasMascota });
+    setUsuario(userLog);
+    setRol(rolLog);
+    setMascotas(listaMascotas);
   }, []);
 
+  const inicial = usuario ? usuario.charAt(0).toUpperCase() : 'U';
+
   return (
-    <section id="perfil-usuario" className="container my-5">
-      <h2 className="mb-4 text-center" style={{ color: '#0b2545' }}>Mi Perfil y Mascota</h2>
-      
-      <div className="row g-4 justify-content-center">
-        <div className="col-md-5">
-          <div className="card shadow-sm border-0 h-100">
-            <div className="card-body p-4">
-              <h3 className="card-title h4 mb-3 text-primary">Datos del Propietario</h3>
-              <p className="mb-2"><strong>Nombre:</strong> {datosUsuario.nombre}</p>
-              <p className="mb-2"><strong>Correo:</strong> {datosUsuario.email}</p>
-              <p className="mb-0"><strong>Rol en el Sistema:</strong> <span className="badge bg-secondary">{datosUsuario.rol}</span></p>
+    <section className="container my-5">
+      <div className="perfil-header text-center text-md-start">
+        <h2 style={{ color: '#0b2545', fontWeight: 'bold' }}>Mi Perfil</h2>
+        <p className="text-muted m-0">Gestiona tu información personal y consulta las mascotas asociadas a tu cuenta.</p>
+      </div>
+
+      <div className="row g-4">
+        <div className="col-lg-5">
+          <div className="tarjeta-perfil text-center text-md-start">
+            <div className="d-flex flex-column align-items-center align-items-md-start">
+              <div className="avatar-usuario">{inicial}</div>
+              <h4 className="fw-bold mb-1" style={{ color: '#0b2545' }}>{usuario}</h4>
+              <span className="badge bg-primary mb-4 px-3 py-2">{rol}</span>
+            </div>
+
+            <div className="mt-3">
+              <div className="info-item">
+                <span className="label">Nombre de Usuario:</span>
+                <span className="value">{usuario}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Rol en el sistema:</span>
+                <span className="value">{rol}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Estado de la cuenta:</span>
+                <span className="value text-success fw-bold">Activa</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="col-md-5">
-          <div className="card shadow-sm border-0 h-100 border-top border-primary border-4">
-            <div className="card-body p-4">
-              <h3 className="card-title h4 mb-3 text-primary">Datos de tu Mascota</h3>
-              <p className="mb-2"><strong>Nombre:</strong> {datosMascota.nombreMascota}</p>
-              <p className="mb-2"><strong>Raza:</strong> {datosMascota.razaMascota}</p>
-              <p className="mb-2"><strong>Edad:</strong> {datosMascota.edadMascota}</p>
-              <p className="mb-0"><strong>Vacunas al día:</strong> <span className="badge bg-success">{datosMascota.vacunasMascota} / 5</span></p>
-            </div>
+        <div className="col-lg-7">
+          <div className="tarjeta-perfil">
+            <h3>Mis Mascotas Registradas</h3>
+
+            {mascotas.length === 0 ? (
+              <div className="text-center py-4">
+                <p className="text-muted">Aún no has registrado ninguna mascota en tu cuenta.</p>
+              </div>
+            ) : (
+              mascotas.map((m, idx) => (
+                <div key={idx} className="tarjeta-mascota-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5>{m.nombre}</h5>
+                    <p className="m-0 text-muted small">
+                      <strong>Especie:</strong> {m.especie} | <strong>Raza:</strong> {m.raza || 'No especificada'} | <strong>Edad:</strong> {m.edad || '0'} años
+                    </p>
+                  </div>
+                  <span className="badge bg-secondary">{m.especie}</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
