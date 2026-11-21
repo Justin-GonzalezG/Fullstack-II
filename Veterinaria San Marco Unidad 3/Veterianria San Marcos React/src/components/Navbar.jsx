@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import logoVSM from '../assets/VSM.png';
 
 export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
-  const esPersonalAutorizado = rolActivo === "Administrador" || rolActivo === "Trabajador";
+  const rolNorm = String(rolActivo || '').trim().toUpperCase();
+  const esAdmin = rolNorm.includes('ADMIN');
+  const esTrabajador =
+    rolNorm.includes('TRABAJADOR') || rolNorm.includes('VENDEDOR');
+
   const [cantidadCarrito, setCantidadCarrito] = useState(0);
 
   useEffect(() => {
@@ -15,10 +19,10 @@ export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
     <header className="header-principal">
       <div className="logo-container">
         <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
-          <img 
-            src={logoVSM} 
-            alt="Veterinaria San Marcos" 
-            style={{ height: '100px', objectFit: 'contain' }} 
+          <img
+            src={logoVSM}
+            alt="Veterinaria San Marcos"
+            style={{ height: '100px', objectFit: 'contain' }}
           />
         </Link>
       </div>
@@ -34,7 +38,16 @@ export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
             Carrito <span className="badge bg-primary rounded-pill ms-1">{cantidadCarrito}</span>
           </Link>
         )}
-        {esPersonalAutorizado && <Link to="/admin" className="text-danger fw-bold">Panel Admin</Link>}
+        {usuarioActivo && esAdmin && (
+          <Link to="/admin" className="text-danger fw-bold">
+            Panel de administración
+          </Link>
+        )}
+        {usuarioActivo && esTrabajador && (
+          <Link to="/trabajador" className="text-success fw-bold">
+            Panel Pedidos
+          </Link>
+        )}
       </nav>
 
       <div className="auth-boton">
@@ -43,7 +56,7 @@ export default function Navbar({ usuarioActivo, rolActivo, onLogout }) {
             <span className="fw-bold" style={{ color: '#0b2545' }}>
               Hola, {usuarioActivo} <small className="text-muted">({rolActivo})</small>
             </span>
-            <button 
+            <button
               className="btn btn-outline-danger btn-sm fw-bold px-3"
               onClick={onLogout}
             >

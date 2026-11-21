@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Valores from './components/Valores';
 import Testimonios from './components/Testimonios';
@@ -11,10 +11,20 @@ import RegistroMascotaPage from './pages/RegistroMascotaPage';
 import CitasPages from './pages/CitasPages';
 import PerfilPage from './pages/PerfilPage';
 import AdminPanelPage from './pages/AdminPanelPage';
+import TrabajadorPanelPage from './pages/TrabajadorPanelPage';
 import ServiciosSeleccionadosPage from './pages/ServiciosSeleccionadosPage';
 import logoHero from './assets/Logo Veterinaria San Marco.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+
+function esRolAdmin(rol) {
+  return String(rol || '').trim().toUpperCase().includes('ADMIN');
+}
+
+function esRolTrabajador(rol) {
+  const r = String(rol || '').trim().toUpperCase();
+  return r.includes('TRABAJADOR') || r.includes('VENDEDOR');
+}
 
 export default function App() {
   const [usuarioActivo, setUsuarioActivo] = useState(null);
@@ -34,14 +44,17 @@ export default function App() {
   }, []);
 
   const handleLoginSuccess = (nombre, rol) => {
+    const guardados = JSON.parse(localStorage.getItem("misServicios")) || [];
     setUsuarioActivo(nombre);
     setRolActivo(rol);
+    setCantidadServicios(guardados.length);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("usuarioLogueado");
     localStorage.removeItem("rolLogueado");
     localStorage.removeItem("misServicios");
+    localStorage.removeItem("token");
     setUsuarioActivo(null);
     setRolActivo(null);
     setCantidadServicios(0);
@@ -60,7 +73,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Navbar usuarioActivo={usuarioActivo} rolActivo={rolActivo} onLogout={handleLogout} />
-      
+
       <main>
         <Routes>
           <Route
@@ -86,9 +99,9 @@ export default function App() {
                       </div>
                     </div>
                     <div className="col-md-6 text-center mt-4 mt-md-0">
-                      <img 
-                        src={logoHero} 
-                        alt="Veterinaria San Marcos - Banner Principal" 
+                      <img
+                        src={logoHero}
+                        alt="Veterinaria San Marcos - Banner Principal"
                         className="img-fluid rounded shadow-sm"
                         style={{ maxHeight: '380px', objectFit: 'contain' }}
                       />
@@ -129,7 +142,26 @@ export default function App() {
             element={<CitasPages usuarioActivo={usuarioActivo} />}
           />
           <Route path="/perfil" element={<PerfilPage />} />
-          <Route path="/admin" element={<AdminPanelPage />} />
+          <Route
+            path="/admin"
+            element={
+              esRolAdmin(rolActivo) ? (
+                <AdminPanelPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/trabajador"
+            element={
+              esRolTrabajador(rolActivo) ? (
+                <TrabajadorPanelPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
           <Route
             path="/carrito-servicios"
             element={<ServiciosSeleccionadosPage />}

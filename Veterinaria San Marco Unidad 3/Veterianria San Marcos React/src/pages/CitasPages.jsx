@@ -11,10 +11,66 @@ export default function CitasPages({ usuarioActivo }) {
   const [hora, setHora] = useState('');
   const [mensaje, setMensaje] = useState('');
 
+  const obtenerHeaders = () => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
+  const cargarCitas = () => {
+    fetch("http://localhost:8080/api/citas", {
+      headers: obtenerHeaders(),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudieron cargar las citas");
+        return res.json();
+      })
+      .then((data) => setCitas(data))
+      .catch((err) => console.error("Error al cargar citas del backend:", err));
+  };
+
+  const cargarMascotas = async () => {
+    const emailUsuario = localStorage.getItem("emailRegistrado") || "";
+    const token = localStorage.getItem("token");
+
+    if (!emailUsuario) {
+      const listaLocal = JSON.parse(localStorage.getItem("mascotas")) || [];
+      setMascotas(listaLocal);
+      return;
+    }
+
+    try {
+      const headers = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/auth/mascotas?email=${encodeURIComponent(emailUsuario)}`,
+        { headers }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setMascotas(data);
+      } else {
+        const listaLocal = JSON.parse(localStorage.getItem("mascotas")) || [];
+        setMascotas(listaLocal);
+      }
+    } catch (error) {
+      console.error("Error al cargar mascotas del backend:", error);
+      const listaLocal = JSON.parse(localStorage.getItem("mascotas")) || [];
+      setMascotas(listaLocal);
+    }
+  };
+
   useEffect(() => {
-    
-    const listaMascotas = JSON.parse(localStorage.getItem("mascotas")) || [];
-    setMascotas(listaMascotas);
+    cargarMascotas();
 
     setServicios([
       "Consulta General",
@@ -25,16 +81,16 @@ export default function CitasPages({ usuarioActivo }) {
       "Cirugías y Esterilización"
     ]);
 
-    fetch("http://localhost:8080/api/citas")
-      .then((res) => res.json())
-      .then((data) => setCitas(data))
-      .catch((err) => console.error("Error al cargar citas del backend:", err));
+    cargarCitas();
   }, []);
 
   const handleAgendar = (e) => {
     e.preventDefault();
 
-    const usuarioActual = usuarioActivo || localStorage.getItem("usuarioLogueado");
+    const usuarioActual =
+      usuarioActivo ||
+      localStorage.getItem("usuarioLogueado") ||
+      localStorage.getItem("nombreRegistrado");
 
     if (!usuarioActual) {
       alert("Debes iniciar sesión para agendar una cita.");
@@ -57,9 +113,7 @@ export default function CitasPages({ usuarioActivo }) {
 
     fetch("http://localhost:8080/api/citas", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: obtenerHeaders(),
       body: JSON.stringify(nuevaCita),
     })
       .then((res) => {
@@ -67,7 +121,7 @@ export default function CitasPages({ usuarioActivo }) {
         return res.json();
       })
       .then((citaGuardada) => {
-        setCitas([...citas, citaGuardada]);
+        setCitas((prev) => [...prev, citaGuardada]);
         setMensaje("¡Cita agendada con éxito en la base de datos!");
         setMascotaSel('');
         setServicioSel('');
@@ -77,6 +131,25 @@ export default function CitasPages({ usuarioActivo }) {
       .catch((err) => {
         console.error(err);
         setMensaje("Error al conectar con el servidor para agendar la cita.");
+      });
+  };
+
+  const handleEliminarCita = (id) => {
+    fetch(`http://localhost:8080/api/citas/${id}`, {
+      method: "DELETE",
+      headers: obtenerHeaders(),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al eliminar la cita");
+        return res.json();
+      })
+      .then(() => {
+        setCitas((prev) => prev.filter((cita) => cita.id !== id));
+        setMensaje("Cita eliminada con éxito.");
+      })
+      .catch((err) => {
+        console.error(err);
+        setMensaje("Error al eliminar la cita en el servidor.");
       });
   };
 
@@ -101,14 +174,16 @@ export default function CitasPages({ usuarioActivo }) {
             <form onSubmit={handleAgendar}>
               <div className="mb-3">
                 <label className="form-label fw-bold">Selecciona tu Mascota:</label>
-                <select 
+                <select
                   className="form-select"
                   value={mascotaSel}
                   onChange={(e) => setMascotaSel(e.target.value)}
                 >
                   <option value="">-- Seleccionar --</option>
                   {mascotas.map((m, idx) => (
-                    <option key={idx} value={m.nombre}>{m.nombre} ({m.especie || m.raza || 'Mascota'})</option>
+                    <option key={m.id || idx} value={m.nombre}>
+                      {m.nombre} ({m.especie || m.raza || 'Mascota'})
+                    </option>
                   ))}
                 </select>
                 {mascotas.length === 0 && (
@@ -118,7 +193,7 @@ export default function CitasPages({ usuarioActivo }) {
 
               <div className="mb-3">
                 <label className="form-label fw-bold">Servicio Requerido:</label>
-                <select 
+                <select
                   className="form-select"
                   value={servicioSel}
                   onChange={(e) => setServicioSel(e.target.value)}
@@ -133,8 +208,8 @@ export default function CitasPages({ usuarioActivo }) {
               <div className="row g-2 mb-4">
                 <div className="col-md-6">
                   <label className="form-label fw-bold">Fecha:</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="form-control"
                     value={fecha}
                     onChange={(e) => setFecha(e.target.value)}
@@ -142,8 +217,8 @@ export default function CitasPages({ usuarioActivo }) {
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-bold">Hora:</label>
-                  <input 
-                    type="time" 
+                  <input
+                    type="time"
                     className="form-control"
                     value={hora}
                     onChange={(e) => setHora(e.target.value)}
@@ -173,7 +248,16 @@ export default function CitasPages({ usuarioActivo }) {
                       <strong>Mascota:</strong> {c.mascota} | <strong>Fecha:</strong> {c.fecha} a las {c.hora} hrs.
                     </p>
                   </div>
-                  <span className="badge bg-success">{c.estado}</span>
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="badge bg-success">{c.estado}</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => handleEliminarCita(c.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
               ))
             )}

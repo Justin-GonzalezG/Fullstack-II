@@ -30,7 +30,7 @@ export default function RegistroPage() {
       }
 
       const data = await res.json();
-      const rolGuardado = data.usuario.rol;
+      const rolGuardado = data.usuario ? data.usuario.rol : "ROLE_CLIENTE";
 
       localStorage.setItem("emailRegistrado", email);
       localStorage.setItem("nombreRegistrado", nombre);

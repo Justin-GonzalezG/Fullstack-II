@@ -1,99 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import img1 from '../assets/Catalogo 1.png';
 import img2 from '../assets/Catalogo 2.png';
 import img3 from '../assets/Catalogo 3.png';
 import img4 from '../assets/Catalogo 4.png';
 import img5 from '../assets/Catalogo 5.png';
-import img6 from '../assets/Catalogo 5.png';
+import img6 from '../assets/Catalogo 6.png';
 
-export default function TiendaPages({ onAgregarProducto, cantidadCarrito }) {
-  const [listaProductos, setListaProductos] = useState([]);
+export default function TiendaPages({ onAgregarProducto, cantidadCarrito = 0 }) {
   const [ultimoProducto, setUltimoProducto] = useState('');
 
-  const productosLocales = [
-    { 
-      id: 1, 
-      nombre: "Alimento Premium Perro (15 kg)", 
-      precio: "35.000", 
-      desc: "Alimento balanceado de alta calidad rico en proteínas para perros adultos.", 
+  const productosCatalogo = [
+    {
+      id: 1,
+      nombre: "Alimento Premium Perro (15 kg)",
+      precio: "35.000",
+      desc: "Alimento balanceado de alta calidad rico en proteínas para perros adultos.",
       categoria: "Alimento",
-      imagen: img1 
+      imagen: img1
     },
-    { 
-      id: 2, 
-      nombre: "Alimento Húmedo Gato (Lata 300g)", 
-      precio: "3.500", 
-      desc: "Paté nutritivo con sabor a salmón para gatos exigentes.", 
+    {
+      id: 2,
+      nombre: "Alimento Húmedo Gato (Lata 300g)",
+      precio: "3.500",
+      desc: "Paté nutritivo con sabor a salmón para gatos exigentes.",
       categoria: "Alimento",
-      imagen: img2 
+      imagen: img2
     },
-    { 
-      id: 3, 
-      nombre: "Juguete Mordedor Kong", 
-      precio: "8.990", 
-      desc: "Juguete de goma ultra resistente para reducir la ansiedad y entretener a tu mascota.", 
+    {
+      id: 3,
+      nombre: "Juguete Mordedor Kong",
+      precio: "8.990",
+      desc: "Juguete de goma ultra resistente para reducir la ansiedad y entretener a tu mascota.",
       categoria: "Accesorios",
-      imagen: img3 
+      imagen: img3
     },
-    { 
-      id: 4, 
-      nombre: "Correa Ajustable con Placa", 
-      precio: "6.500", 
-      desc: "Correa reflectante de alta durabilidad con diseño ergonómico.", 
+    {
+      id: 4,
+      nombre: "Correa Ajustable con Placa",
+      precio: "6.500",
+      desc: "Correa reflectante de alta durabilidad con diseño ergonómico.",
       categoria: "Accesorios",
-      imagen: img4 
+      imagen: img4
     },
-    { 
-      id: 5, 
-      nombre: "Cama Acolchada Confort", 
-      precio: "18.500", 
-      desc: "Cama suave, lavable y térmica para el descanso ideal de perros y gatos.", 
+    {
+      id: 5,
+      nombre: "Cama Acolchada Confort",
+      precio: "18.500",
+      desc: "Cama suave, lavable y térmica para el descanso ideal de perros y gatos.",
       categoria: "Confort",
-      imagen: img5 
+      imagen: img5
     },
-    { 
-      id: 6, 
-      nombre: "Shampoo Antipulgas (250 ml)", 
-      precio: "7.990", 
-      desc: "Fórmula especial de limpieza profunda con protección contra parásitos externos.", 
-      categoria: "Higiene",
-      imagen: img6 
+    {
+      id: 6,
+      nombre: "Cama Mascota Diseño Huellitas",
+      precio: "18.500",
+      desc: "Cama suave, acogedora, térmica y lavable con diseño de huellitas para gatos y perros.",
+      categoria: "Confort",
+      imagen: img6
     }
   ];
 
-  const imagenesEstaticas = [img1, img2, img3, img4, img5, img6];
-
-  useEffect(() => {
-
-    fetch("http://localhost:8080/api/productos")
-      .then((res) => {
-        if (!res.ok) throw new Error("Error en la respuesta del backend");
-        return res.json();
-      })
-      .then((data) => {
-        if (data && data.length > 0) {
-
-          const productosConImagen = data.map((p, index) => ({
-            ...p,
-            precio: p.precio ? p.precio.toString().replace('$', '') : '0',
-            desc: p.descripcion || p.desc || "Sin descripción",
-            imagen: p.imagen || imagenesEstaticas[index % imagenesEstaticas.length]
-          }));
-          
-          setListaProductos(productosConImagen);
-        } else {
-          setListaProductos(productosLocales);
-        }
-      })
-      .catch((err) => {
-        console.warn("Backend no disponible o sin conexión, usando productos locales:", err);
-        setListaProductos(productosLocales);
-      });
-  }, []);
-
   const handleAgregarAlCarrito = (producto) => {
-    if (!localStorage.getItem("usuarioLogueado")) {
+    const tieneSesion =
+      localStorage.getItem("usuarioLogueado") ||
+      localStorage.getItem("token") ||
+      localStorage.getItem("usuario");
+
+    if (!tieneSesion) {
       alert("Debes iniciar sesión para comprar productos en la tienda.");
       return;
     }
@@ -103,18 +77,24 @@ export default function TiendaPages({ onAgregarProducto, cantidadCarrito }) {
     localStorage.setItem("misServicios", JSON.stringify(nuevosItems));
 
     setUltimoProducto(producto.nombre);
-    onAgregarProducto();
+    if (typeof onAgregarProducto === "function") {
+      onAgregarProducto(producto);
+    }
   };
 
   return (
     <section className="container my-5">
-      <div className="tienda-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 bg-white p-4 rounded shadow-sm border">
         <div>
-          <h2 style={{ color: '#0b2545', fontWeight: 'bold' }}>Tienda de Productos</h2>
-          <p className="text-muted m-0">Encuentra los mejores artículos, alimentos y accesorios para tu mascota:</p>
+          <h2 style={{ color: '#0b2545', fontWeight: 'bold' }} className="mb-1">
+            Tienda de Productos
+          </h2>
+          <p className="text-muted m-0">
+            Encuentra los mejores artículos, alimentos y accesorios para tu mascota:
+          </p>
         </div>
-        <div className="bg-light p-3 rounded border text-center">
-          <span className="d-block fw-bold text-secondary">Ítems en el carrito:</span>
+        <div className="bg-light px-4 py-2 rounded border text-center">
+          <span className="d-block fw-bold text-secondary small">Ítems en el carrito:</span>
           <span className="fs-4 fw-bold text-primary">{cantidadCarrito}</span>
         </div>
       </div>
@@ -125,30 +105,41 @@ export default function TiendaPages({ onAgregarProducto, cantidadCarrito }) {
         </div>
       )}
 
-      <div className="tienda-grid">
-        {listaProductos.map((p) => (
-          <div key={p.id || p.nombre} className="tarjeta-producto">
-            <div>
-              <div className="imagen-producto-container mb-3 text-center">
-                <img 
-                  src={p.imagen} 
-                  alt={p.nombre} 
-                  className="img-fluid rounded shadow-sm" 
-                  style={{ height: '160px', width: '100%', objectFit: 'cover' }} 
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {productosCatalogo.map((p) => (
+          <div key={p.id} className="col">
+            <div className="card h-100 shadow-sm border">
+              <div className="p-3 bg-light rounded-top text-center">
+                <img
+                  src={p.imagen}
+                  alt={p.nombre}
+                  className="img-fluid rounded"
+                  style={{ height: '180px', width: '100%', objectFit: 'contain' }}
                 />
               </div>
-              <span className="badge-categoria">{p.categoria}</span>
-              <h3>{p.nombre}</h3>
-              <p>{p.desc}</p>
-            </div>
-            <div>
-              <span className="precio-producto">${p.precio}</span>
-              <button 
-                className="btn btn-primary w-100 mt-3"
-                onClick={() => handleAgregarAlCarrito(p)}
-              >
-                Añadir al Carrito
-              </button>
+
+              <div className="card-body d-flex flex-column justify-content-between">
+                <div>
+                  <span className="badge bg-primary mb-2">{p.categoria}</span>
+                  <h5 className="card-title fw-bold mb-1" style={{ color: '#0b2545' }}>
+                    {p.nombre}
+                  </h5>
+                  <p className="card-text text-muted small">
+                    {p.desc}
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2 border-top">
+                  <div className="fs-5 fw-bold text-success mb-2">${p.precio}</div>
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100 fw-semibold"
+                    onClick={() => handleAgregarAlCarrito(p)}
+                  >
+                    Añadir al Carrito
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ))}

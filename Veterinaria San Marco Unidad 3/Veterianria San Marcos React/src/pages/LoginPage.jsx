@@ -22,9 +22,15 @@ export default function LoginPage({ onLoginSuccess }) {
       }
 
       const data = await res.json();
+      const tokenRecibido =
+        data.token || data.accessToken || data.jwt || data.access_token;
 
+      if (tokenRecibido) {
+        localStorage.setItem("token", tokenRecibido);
+      }
       localStorage.setItem("usuarioLogueado", data.nombre);
       localStorage.setItem("rolLogueado", data.rol);
+      localStorage.setItem("emailRegistrado", data.email || email);
 
       alert(`Bienvenido ${data.nombre} (${data.rol})`);
       onLoginSuccess(data.nombre, data.rol);

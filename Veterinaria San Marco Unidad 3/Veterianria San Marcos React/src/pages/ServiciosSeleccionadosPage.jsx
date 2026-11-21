@@ -1,39 +1,114 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ServiciosSeleccionadosPage() {
+export default function ServiciosSeleccionadosPage({ onVaciarCarrito, onActualizarCarrito }) {
   const [items, setItems] = useState([]);
   const [mensaje, setMensaje] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [confirmando, setConfirmando] = useState(false);
 
   useEffect(() => {
     const guardados = JSON.parse(localStorage.getItem("misServicios")) || [];
     setItems(guardados);
   }, []);
 
+  const limpiarPrecio = (precio) => {
+    const limpio = String(precio ?? '').replace(/[^0-9]/g, '');
+    const valor = parseInt(limpio, 10);
+    return Number.isNaN(valor) ? 0 : valor;
+  };
+
+  const obtenerNombreCategoria = (categoria) => {
+    if (typeof categoria === "object" && categoria !== null) {
+      return categoria.nombre || "General";
+    }
+    return categoria || "General";
+  };
+
+  const notificarCambioCarrito = (nuevaLista) => {
+    if (typeof onActualizarCarrito === "function") {
+      onActualizarCarrito(nuevaLista.length);
+    }
+  };
+
   const handleEliminar = (indexAEliminar) => {
     const nuevosItems = items.filter((_, idx) => idx !== indexAEliminar);
     setItems(nuevosItems);
     localStorage.setItem("misServicios", JSON.stringify(nuevosItems));
+    notificarCambioCarrito(nuevosItems);
   };
 
   const handleVaciarCarrito = () => {
     setItems([]);
     localStorage.removeItem("misServicios");
+    if (typeof onVaciarCarrito === "function") {
+      onVaciarCarrito();
+    } else {
+      notificarCambioCarrito([]);
+    }
   };
 
-  const handleConfirmar = () => {
+  const handleConfirmar = async () => {
     if (items.length === 0) return;
-    setMensaje("¡Solicitud/Compra confirmada con éxito! Nos pondremos en contacto contigo.");
-    setItems([]);
-    localStorage.removeItem("misServicios");
+
+    setConfirmando(true);
+    setErrorMsg('');
+    setMensaje('');
+
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    try {
+      for (const item of items) {
+        const nombreCategoria = obtenerNombreCategoria(item.categoria);
+        const categoriaObj =
+          typeof item.categoria === "object" && item.categoria !== null && item.categoria.id
+            ? { id: item.categoria.id, nombre: nombreCategoria }
+            : { nombre: nombreCategoria };
+
+        const payload = {
+          nombre: item.nombre,
+          precio: limpiarPrecio(item.precio),
+          stock: item.stock ?? 1,
+          descripcion: item.desc || item.descripcion || "Producto/Servicio confirmado desde el carrito",
+          categoria: categoriaObj,
+        };
+
+        const response = await fetch("http://localhost:8080/api/productos", {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const detalleError = await response.text();
+          throw new Error(detalleError || `Error HTTP ${response.status}`);
+        }
+      }
+
+      setMensaje("¡Compra/Solicitud confirmada con éxito! Su compra quedo registrada.");
+      setItems([]);
+      localStorage.removeItem("misServicios");
+      if (typeof onVaciarCarrito === "function") {
+        onVaciarCarrito();
+      } else {
+        notificarCambioCarrito([]);
+      }
+    } catch (err) {
+      console.error("Error al guardar en la base de datos:", err);
+      setErrorMsg(`No se pudo confirmar la compra: ${err.message}`);
+    } finally {
+      setConfirmando(false);
+    }
   };
 
-  // Calcular precio total dinámicamente convirtiendo "$15.000" a número
   const calcularTotal = () => {
-    return items.reduce((acc, item) => {
-      const precioLimpio = parseInt(item.precio.replace(/[^0-9]/g, '')) || 0;
-      return acc + precioLimpio;
-    }, 0);
+    return items.reduce((acc, item) => acc + limpiarPrecio(item.precio), 0);
   };
 
   return (
@@ -42,6 +117,12 @@ export default function ServiciosSeleccionadosPage() {
         <h2 style={{ color: '#0b2545', fontWeight: 'bold' }}>Carrito de Servicios y Productos</h2>
         <p className="text-muted m-0">Revisa el detalle de tus selecciones antes de confirmar tu solicitud.</p>
       </div>
+
+      {errorMsg && (
+        <div className="alert alert-danger text-center py-3 mb-4">
+          {errorMsg}
+        </div>
+      )}
 
       {mensaje && (
         <div className="alert alert-success text-center py-3 mb-4">
@@ -57,7 +138,8 @@ export default function ServiciosSeleccionadosPage() {
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="m-0" style={{ color: '#0b2545', fontWeight: '700' }}>Ítems Seleccionados</h4>
               {items.length > 0 && (
-                <button 
+                <button
+                  type="button"
                   className="btn btn-outline-danger btn-sm"
                   onClick={handleVaciarCarrito}
                 >
@@ -76,14 +158,20 @@ export default function ServiciosSeleccionadosPage() {
               </div>
             ) : (
               items.map((item, idx) => (
-                <div key={idx} className="item-carrito flex-wrap gap-2">
+                <div key={`${item.nombre}-${idx}`} className="item-carrito flex-wrap gap-2">
                   <div>
                     <h5>{item.nombre}</h5>
-                    <p className="text-muted small m-0">{item.desc || 'Servicio/Producto para tu mascota'}</p>
+                    <p className="text-muted small m-0">
+                      {item.desc || item.descripcion || 'Servicio/Producto para tu mascota'}
+                    </p>
+                    <small className="text-secondary">
+                      Categoría: {obtenerNombreCategoria(item.categoria)}
+                    </small>
                   </div>
                   <div className="d-flex align-items-center gap-3">
-                    <span className="precio-item">{item.precio}</span>
-                    <button 
+                    <span className="precio-item">${limpiarPrecio(item.precio).toLocaleString('es-CL')}</span>
+                    <button
+                      type="button"
                       className="btn btn-sm btn-outline-danger"
                       onClick={() => handleEliminar(idx)}
                       title="Eliminar ítem"
@@ -113,12 +201,13 @@ export default function ServiciosSeleccionadosPage() {
               </div>
             </div>
 
-            <button 
+            <button
+              type="button"
               className="btn btn-success w-100 py-2 fw-bold fs-6"
-              disabled={items.length === 0}
+              disabled={items.length === 0 || confirmando}
               onClick={handleConfirmar}
             >
-              Confirmar Solicitud
+              {confirmando ? 'Confirmando...' : 'Confirmar Solicitud'}
             </button>
           </div>
         </div>
